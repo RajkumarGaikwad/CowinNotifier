@@ -1,6 +1,4 @@
-
-
- (function() {
+(function() {
 
 
    getAreaInfo = () => {
@@ -20,8 +18,7 @@
 	    				let message = 'Vaccination available for : ' ;
 				      	var beepsound = new Audio( 'https://www.soundjay.com/button/sounds/beep-01a.mp3'); 
 						await beepsound.play(); 
-				   		clearInterval(this.intervalid);
-				   		alert(message + vaccinationAvailPincodes.toString());
+				   		alert(message + vaccinationAvailPincodes);
   	}
 
 
@@ -30,7 +27,6 @@
 
 	   	
 	   	let vaccinationAvailPincodes = [];
-	   	let vaccinationNotAvailPincodes = [];
 		
 		let areas = getAreaInfo();
 
