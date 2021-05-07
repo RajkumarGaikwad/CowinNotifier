@@ -5,7 +5,8 @@ This repo contains a script which can be used send browser notification to a use
 
  <ol>
   <li>Go to <a href="https://www.cowin.gov.in/home/" target="_blank"> Cowin portal </a> </b></li>
-  <li>Enter pin / serach by State/City </li>
+  <li>Enter pin / serach by State/City under "Check your nearest vaccination center and slots availability" Section
+ </li>
   <li>Right click, inspect & paste cowinNotifer script in browser console</li>
 </ol>
 
