@@ -95,7 +95,7 @@
   			}
  	} 
 
-	 if (vaccinationAvailPincodes.length > 1) {
+	 if (vaccinationAvailPincodes.length > 0) {
 	 	 showAlert(vaccinationAvailPincodes);
 	 }
    		//click search
