@@ -43,11 +43,8 @@ function checkVaccineStatus() {
     }
 
     getCenter = (areas, pincode) => {
-        console.log(pincode);
 
         let selectedCenter = areas.filter(function(center) {
-            console.log(center.innerText);
-
 
             let description = center.innerText || '';
             return description.includes(pincode);
