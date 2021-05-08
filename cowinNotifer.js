@@ -5,8 +5,17 @@ let punePinCodes = [
     "413102",
     "411041",
     "411027",
+    "413110",
+    "411023",
     "411045"
 ];
+
+let InputRequest = {
+    alertOnly18_44: true,
+    alertOnly45Plus: false
+}
+
+
 
 function checkVaccineStatus() {
 
@@ -15,7 +24,7 @@ function checkVaccineStatus() {
         let message = 'Vaccination available for : ';
         var beepsound = new Audio('https://www.soundjay.com/button/sounds/beep-01a.mp3');
         await beepsound.play();
-        console.alert(message + vaccinationAvailPincodes);
+        alert(message + vaccinationAvailPincodes);
         console.info(message + vaccinationAvailPincodes);
     }
 
@@ -31,7 +40,7 @@ function checkVaccineStatus() {
 
         return centerlist;
 
-    };
+    }
 
     getCenter = (areas, pincode) => {
         console.log(pincode);
@@ -45,7 +54,7 @@ function checkVaccineStatus() {
         });
 
         return selectedCenter;
-    };
+    }
 
     getSelectedAreas = (areas = []) => {
 
@@ -57,6 +66,44 @@ function checkVaccineStatus() {
         return selectedCenters;
     }
 
+    getSlot = (address, place) => {
+        return {
+            address,
+            place
+        }
+    }
+
+    filterBasedOnAgeLimit = (center, ageLimit) => {
+
+        var shortlistedSlots = [];
+
+        if (center) {
+
+            var placeAddress = center.innerText;
+
+            let parent = center.parentElement.parentElement.parentElement;
+            let allplaces = parent.getElementsByClassName('vaccine-box') || [];
+
+
+            let allplacesarr = [];
+
+            for (let cdi = 0; cdi < allplaces.length; cdi++) {
+                allplacesarr.push(allplaces[cdi]);
+            }
+
+            for (let place of allplacesarr) {
+                var ageLimitEl = place.getElementsByClassName("age-limit")[0] || {};
+                if (ageLimitEl.innerText && ageLimitEl.innerText.includes(ageLimit)) {
+                    shortlistedSlots.push(getSlot(placeAddress, place));
+                }
+            }
+
+        }
+
+        return shortlistedSlots;
+    }
+
+
 
     checkStatus = () => {
 
@@ -66,35 +113,30 @@ function checkVaccineStatus() {
 
         let shortlistedAreas = getSelectedAreas(areas);
 
-        for (let idx = 0; idx < shortlistedAreas.length; idx++) {
+        let shortlistedAllSlots = [];
 
-            var shortlistedCenters = shortlistedAreas[idx] || [];
+        for (let centers of shortlistedAreas) {
 
-            for (let ci = 0; ci < shortlistedCenters.length; ci++) {
+            centers = centers || [];
 
-                var actualparent = shortlistedCenters[ci];
+            for (let center of centers) {
 
-                if (actualparent) {
-                    var placstr = actualparent.innerText;
-
-                    let parent = actualparent.parentElement.parentElement.parentElement;
-                    let allplaces = parent.getElementsByClassName('vaccine-box') || [];
-
-                    let allplacesarr = [];
-
-                    for (let cdi = 0; cdi < allplaces.length; cdi++) {
-                        allplacesarr.push(allplaces[cdi]);
-                    }
-
-                    for (let place of allplacesarr) {
-                        var placename = (place.firstChild.innerText || "").toLowerCase();
-                        if (!(placename == "booked" || placename == "na")) {
-                            vaccinationAvailPincodes.push(placstr);
-                            break;
-                        }
-                    }
-
+                //get only 18-44 age booking slots
+                if (InputRequest.alertOnly18_44) {
+                    shortlistedAllSlots = shortlistedAllSlots.concat(filterBasedOnAgeLimit(center, "18+"));
                 }
+                //get only 45+ age booking slots
+                if (InputRequest.alertOnly45Plus) {
+                    shortlistedAllSlots = shortlistedAllSlots.concat(filterBasedOnAgeLimit(center, "45+"));
+                }
+            }
+        }
+
+        for (let slot of shortlistedAllSlots) {
+            var placename = (slot.place.firstChild.innerText || "").toLowerCase();
+            if (!(placename == "booked" || placename == "na")) {
+                vaccinationAvailPincodes.push(slot.address);
+                break;
             }
         }
 
