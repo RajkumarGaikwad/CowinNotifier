@@ -120,7 +120,7 @@ function checkVaccineStatus() {
         }
 
         for (let slot of shortlistedAllSlots) {
-            var placename = (slot.place.firstChild.innerText || "").toLowerCase();
+            var placename = (slot.place.firstChild.innerText || "").toLowerCase().trim();
             if (!(placename == "booked" || placename == "na")) {
                 vaccinationAvailPincodes.push(slot.address);
                 break;
